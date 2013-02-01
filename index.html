@@ -15,12 +15,22 @@
       src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=[API_KEY_HERE]&sensor=false">
     </script>
     <script type="text/javascript">
+      function jitter(){
+        var j = Math.random() - .5; // -.5:.5
+        return j * 0.002;
+      }
       function load_heatmap(map) {
         /* Data points defined as an array of LatLng objects */
         var heatmapData = [];
         var point;
         for (var i in data_points) {
-          point = new google.maps.LatLng(data_points[i][0], data_points[i][1]);
+          var x = data_points[i][0],
+              y = data_points[i][1];
+          // Apply some jitter
+          x += jitter();
+          y += jitter();
+
+          point = new google.maps.LatLng(x, y);
           heatmapData.push(point);
         }
 
