@@ -8,9 +8,27 @@
       #map_canvas { height: 100% }
     </style>
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=[API_KEY_HERE]&sensor=false">
+      src="data_points.js">
+    <!-- Needs to export `data_points` as an array of arrays -->
+    </script>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?libraries=visualization&key=[API_KEY_HERE]&sensor=false">
     </script>
     <script type="text/javascript">
+      function load_heatmap(map) {
+        /* Data points defined as an array of LatLng objects */
+        var heatmapData = [];
+        var point;
+        for (var i in data_points) {
+          point = new google.maps.LatLng(data_points[i][0], data_points[i][1]);
+          heatmapData.push(point);
+        }
+
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+          data: heatmapData
+        });
+        heatmap.setMap(map);
+      }
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(-37.711662, 144.925346),
@@ -19,6 +37,7 @@
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"),
             mapOptions);
+        load_heatmap(map);
       }
       </script>
   </head>
@@ -26,4 +45,3 @@
     <div id="map_canvas" style="width:100%; height:100%"></div>
   </body>
 </html>
-
